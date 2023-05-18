@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+  </head>
+  <body>
+    <h1>Session log</h1>
+    <p>
+      <label>Title: <input type="text" id="titleInput" value="<?= session.title ?>"></label>
+      <input type="button" value="<?= session.start == 0 ? 'Start' : 'Stop' ?>" id="toggleButton">
+    </p>
+    <div id="container"></div>
+    <p>
+      <label>Start: <p id="start"><?= session.start == 0 ? parseInt(session.start) : session.start?></p></label>
+      <p id="stopwatch"></p>
+    </p>
+  </body>
+
+  <script>
+    const buttons = {
+      'Ma 1c work': 7,
+      'Ph 1c work': 6,
+      'Bi 1 work': 2,
+      'CS 3 work': 5,
+      'Hum 18 work': 4,
+      'Ma 162a work': 9,
+      'Email Check': 8,
+      'Recreational study': 8,
+    }
+    let titleInput = document.getElementById('titleInput');
+    let toggleButton = document.getElementById('toggleButton');
+    let start = document.getElementById('start');
+    let stopwatch = document.getElementById('stopwatch');
+    toggleButton.addEventListener('click', toggle);
+
+    function toggle() {
+      if (toggleButton.value == "Stop") {
+        google.script.run.withSuccessHandler(() => { titleInput.value = ""; start.innerHTML = 0; }).stop();
+        toggleButton.value = "Start";
+      } else {
+        google.script.run.withSuccessHandler((startTime) => { start.innerHTML = startTime; }).start(titleInput.value);
+        toggleButton.value = "Stop";
+      }
+    }
+
+    var container = document.getElementById('container');
+    const makeButton = (title) => {
+      var button = document.createElement('input');
+      button.type = 'button';
+      button.id = title;
+      button.value = title;
+      button.onclick = () => {
+       titleInput.value = title;
+      };
+      container.appendChild(button);
+    }
+    Object.keys(buttons).forEach(makeButton);
+    
+    
+    function showClock() {
+      var nowTime = (new Date()).getTime();
+      if (parseInt(start.innerHTML) == 0) {
+        document.getElementById("stopwatch").innerHTML = "";
+      } else {
+        var startTime = (new Date(start.innerHTML)).getTime();
+        var elapse = Math.floor((nowTime - startTime)/1000);
+        document.getElementById("stopwatch").innerHTML = secondsToHMS(elapse);
+      }
+    }
+    showClock();
+    setInterval('showClock()',1000);
+    function secondsToHMS(seconds) {
+      let hours = Math.floor(seconds / 3600);
+      let minutes = Math.floor((seconds - (hours * 3600)) / 60);
+      let remainingSeconds = seconds - (hours * 3600) - (minutes * 60);
+      if (hours < 10) {
+        hours = '0' + hours;
+      }
+      if (minutes < 10) {
+        minutes = '0' + minutes;
+      }
+      if (remainingSeconds < 10) {
+        remainingSeconds = '0' + remainingSeconds;
+      }
+      return `${hours}:${minutes}:${remainingSeconds}`;
+    }
+  </script>
+</html>

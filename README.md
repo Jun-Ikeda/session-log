@@ -4,4 +4,5 @@ Created with Google Apps Script, Clasp. Based on Material Design.
 
 Saves the timestamp online. You can start a session on one device and stop it on another. 
 
-[https://github.com/Jun-Ikeda/session-log/blob/main/screenshot.png](https://github.com/Jun-Ikeda/session-log/blob/main/screenshot.png?raw=true)
+
+![screenshot](https://github.com/Jun-Ikeda/session-log/assets/63273268/c4aebbad-138b-4448-9828-a39e26f41a89)
